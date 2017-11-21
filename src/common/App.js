@@ -22,11 +22,16 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Layout>
+        <Layout 
+          style={
+            { height: '100%' }
+          }>
           <Sider collapsed={this.state.collapsed} />
           <Layout>
             <Header 
-              style={{ background: '#fff', padding: 0 }}
+              style={
+                { background: '#fff', padding: 0 }
+              }
               collapsed={this.state.collapsed}
               toggle={this.toggle } />
             <Content />

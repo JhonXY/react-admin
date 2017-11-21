@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
 
 class HostelOrder extends Component {
-  state = {  }
+  constructor(props){
+    super(props)
+    this.state = {
+
+    }
+    this.submit = this.submit.bind(this)
+  }
+  submit(){
+    console.log('====================================');
+    console.log(this.props);
+    console.log('====================================');
+  }
   render() {
     return (
-      <div>hosOrder</div>
+      <div onClick={this.submit}>click</div>
     );
   }
 }
