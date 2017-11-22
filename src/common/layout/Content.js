@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { Layout, Breadcrumb, Icon } from 'antd';
 
+import { connect } from 'react-redux'
+
 import Index from '../pages/Index';
 import HostelForm from '../pages/HostelForm';
 import FoodForm from '../pages/FoodForm';
@@ -11,8 +13,16 @@ import FoodOrder from '../pages/FoodOrder';
 const { Content } = Layout;
 
 class Contents extends Component {
-  state = {
-    path: []
+  constructor(props) {
+    super(props)
+    this.state = {
+      path: []
+    }
+  }
+  componentDidMount(){
+    console.log('====================================');
+    // console.log(this.props.dispatch({type: 'ADD'}) );
+    console.log('====================================');
   }
 
   render() {
@@ -47,12 +57,10 @@ class Contents extends Component {
         </Breadcrumb>
           <Route exact path="/index" component={Index} />
           <Route path='/form'>
-          
             <Switch>
               <Route path='/form/hostelForm' component={HostelForm} />
               <Route path='/form/foodForm' component={FoodForm} />
             </Switch>
-          
           </Route>
           <Route path='/order'>
             <Switch>

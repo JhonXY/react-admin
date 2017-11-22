@@ -10,7 +10,7 @@ class HostelOrder extends Component {
   }
   submit(){
     console.log('====================================');
-    console.log(this.props);
+    console.log(this);
     console.log('====================================');
   }
   render() {

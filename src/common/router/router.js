@@ -1,16 +1,20 @@
-import React from 'react'
+import React from 'react';
 import {
-  BrowserRouter,
-  Route
+  Router,
+  Route,
+  BrowserRouter
 } from 'react-router-dom'
 import App from '../App';
+import { Provider } from 'react-redux';
+import store from '../redux/store';
 
 // 路由设置存放
 const routes = (
-  <BrowserRouter
-  >
-    <Route path="/" component={App} />
-  </BrowserRouter>  
+  <Provider store={store}>
+    <BrowserRouter>
+      <Route exac path="/" component={App} />
+    </BrowserRouter>
+  </Provider>  
 )
 
 export default routes;
