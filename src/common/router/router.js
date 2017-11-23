@@ -12,7 +12,8 @@ import store from '../redux/store';
 const routes = (
   <Provider store={store}>
     <BrowserRouter>
-      <Route exac path="/" component={App} />
+      <App/>
+      {/* <Route exac path="/" component={App} /> */}
     </BrowserRouter>
   </Provider>  
 )

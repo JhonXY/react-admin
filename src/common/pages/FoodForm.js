@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'antd';
+import { Switch, Route, Link } from 'react-router-dom';
 import { Menu, Dropdown, Button, Icon } from 'antd';
 import { Input } from 'antd';
 import { Table } from 'antd';
@@ -8,11 +9,28 @@ import './style/foodForm.scss';
 class FoodForm extends Component {
   state = { 
     selectedRowKeys: [], // 选中的行
+    data: null
   }
 
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
+  }
+
+  componentWillMount() {
+    const data = [];
+    for (let i = 0; i < 50; i++) {
+      data.push({
+        key: i,
+        name: `啦啦啦 ${i}`,
+        category: 'lalala',
+        img: "https://oimageb7.ydstatic.com/image?id=8890261127673308097&product=dict-homepage&w=200&h=150&fill=0&cw=200&ch=150&sbc=0&cgra=CENTER",
+        unit: '件',
+        price: 123,
+        tags: ['产品热销', '最新上架'],
+      });
+    }
+    this.setState({data})
   }
 
   render() {
@@ -32,25 +50,21 @@ class FoodForm extends Component {
       </Menu>
     );
 
-    // 更多操作下拉
-    const moreMenu = (
-      <Menu>
-        <Menu.Item>
-          <a target="_blank">修改</a>
-        </Menu.Item>
-        <Menu.Item>
-          <a target="_blank">删除</a>
-        </Menu.Item>
-      </Menu>
-    );
-
     // 表格列配置
     // 如果是可滑动表格则必须width，不然会不对齐
     const columns = [
       {
         title: '商品图片',
         dataIndex: 'img',
-        width: 150
+        width: 150,
+        render: (text, record, index) => {
+          return (
+            < img heght = '50px'
+            width = '50px'
+            src = {text}
+            alt = "" / >
+          )
+        },
       }, {
         title: '商品分类',
         dataIndex: 'category',
@@ -64,29 +78,46 @@ class FoodForm extends Component {
         dataIndex: 'unit',
         width: 150
       }, {
+        title: '商品售价',
+        dataIndex: 'price',
+        width: 150,
+        render: (text)=>{
+          return (
+            `￥${text}`
+          )
+        }
+      }, {
         title: '商品标签',
         dataIndex: 'tags',
         width: 150
       }, {
         title: '操作',
-        dataIndex: 'more',
-        width: 50
+        width: 50,
+        render: (text, record, index)=>{
+          // 更多操作下拉
+          const moreMenu = (
+            <Menu>
+              <Menu.Item>
+                <Link 
+                  to={{
+                      pathname: "/form/foodForm/change",
+                      query: record
+                  }}
+                >修改</Link>
+              </Menu.Item>
+              <Menu.Item>
+                <a target="_blank">删除</a>
+              </Menu.Item>
+            </Menu>
+          );
+          return (
+            <Dropdown overlay = {moreMenu}>
+              <span>< Icon type = "plus"style = {{fontSize: 16,color: '#08c'}}/></span >
+            </Dropdown>
+          )
+        }
       }
     ];
-
-    // 表格数据
-    const data = [];
-    for (let i = 0; i < 50; i++) {
-      data.push({
-        key: i,
-        name: `啦啦啦 ${i}`,
-        category: 'lalala',
-        img: <img heght='50px' width='50px' src="https://oimageb5.ydstatic.com/image?id=-127115110116991995&amp;product=dict-homepage&amp;w=200&amp;h=150&amp;fill=0&amp;cw=200&amp;ch=150&amp;sbc=0&amp;cgra=CENTER" alt=""/>,
-        unit: '件',
-        tags: ['产品热销','最新上架'],
-        more: <Dropdown overlay={moreMenu}><span href=""><Icon type="plus" style={{ fontSize: 16, color: '#08c' }} /></span></Dropdown>
-      });
-    }
 
     // 获取到选中行
     const { selectedRowKeys } = this.state;
@@ -120,7 +151,13 @@ class FoodForm extends Component {
           {tableBox()}
         </div>
         <div className="tabel-content">
-          <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ pageSize: 25 }} scroll={{ y: 500 }}/>
+          <Table 
+          ref="table" 
+          rowSelection={rowSelection} 
+          columns={columns} 
+          dataSource={this.state.data} 
+          pagination={{ pageSize: 25 }} 
+          scroll={{ y: 500 }}/>
         </div>
       </div>
     );

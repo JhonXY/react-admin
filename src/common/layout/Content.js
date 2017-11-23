@@ -7,6 +7,8 @@ import { connect } from 'react-redux'
 import Index from '../pages/Index';
 import HostelForm from '../pages/HostelForm';
 import FoodForm from '../pages/FoodForm';
+import FoodFormChange from '../pages/FoodFormChange';
+import FoodFormNew from '../pages/FoodFormNew';
 import HostelOrder from '../pages/HostelOrder';
 import FoodOrder from '../pages/FoodOrder';
 
@@ -20,9 +22,7 @@ class Contents extends Component {
     }
   }
   componentDidMount(){
-    console.log('====================================');
-    // console.log(this.props.dispatch({type: 'ADD'}) );
-    console.log('====================================');
+
   }
 
   render() {
@@ -59,7 +59,9 @@ class Contents extends Component {
           <Route path='/form'>
             <Switch>
               <Route path='/form/hostelForm' component={HostelForm} />
-              <Route path='/form/foodForm' component={FoodForm} />
+              <Route exact path='/form/foodForm' component={FoodForm} />
+              <Route path='/form/foodForm/change' component={FoodFormChange} /> 
+              <Route path='/form/foodForm/new' component={FoodFormNew} /> 
             </Switch>
           </Route>
           <Route path='/order'>

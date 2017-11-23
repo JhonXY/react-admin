@@ -9,9 +9,6 @@ class HostelOrder extends Component {
     this.submit = this.submit.bind(this)
   }
   submit(){
-    console.log('====================================');
-    console.log(this);
-    console.log('====================================');
   }
   render() {
     return (
