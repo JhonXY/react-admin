@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route, Link, Redirect } from 'react-router-dom';
 import { Layout, Breadcrumb, Icon } from 'antd';
 
 import { connect } from 'react-redux'
@@ -47,7 +47,10 @@ class Contents extends Component {
         { margin: '24px 16px', 
           padding: 24, 
           background: '#fff', 
-          minHeight: 280 }
+          minHeight: 300,
+          overflowY: 'scroll',
+          overflowX: 'scroll',
+          minWidth: 1071}
         }>
         <Breadcrumb>
           <Breadcrumb.Item href="/">
@@ -55,21 +58,15 @@ class Contents extends Component {
           </Breadcrumb.Item>
           {breads}
         </Breadcrumb>
-          <Route exact path="/index" component={Index} />
-          <Route path='/form'>
-            <Switch>
-              <Route path='/form/hostelForm' component={HostelForm} />
-              <Route exact path='/form/foodForm' component={FoodForm} />
-              <Route path='/form/foodForm/change' component={FoodFormChange} /> 
-              <Route path='/form/foodForm/new' component={FoodFormNew} /> 
-            </Switch>
-          </Route>
-          <Route path='/order'>
-            <Switch>
-              <Route path='/order/hostelOrder/:id' component={HostelOrder} />
-              <Route path='/order/foodOrder' component={FoodOrder} />
-            </Switch>
-          </Route>
+        <Switch>
+          <Route exact path="/app" component={Index} />
+          <Route path='/app/form/hostelForm' component={HostelForm} />
+          <Route path='/app/form/foodForm' component={FoodForm} />
+          <Route path='/app/form/foodForm/change' component={FoodFormChange} />
+          <Route path='/app/form/foodForm/new' component={FoodFormNew} />
+          <Route path='/app/order/hostelOrder/:id' component={HostelOrder} />
+          <Route path='/app/order/foodOrder' component={FoodOrder} />
+        </Switch>
       </Content>
     );
   }

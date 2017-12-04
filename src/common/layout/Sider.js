@@ -21,7 +21,7 @@ class SiderBar extends Component {
         <div className="logo">管理系统</div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item key="1">
-            <Link to='/index'>
+            <Link to='/app'>
               <Icon type="upload" />
               <span>首页</span>
             </Link>
@@ -36,8 +36,8 @@ class SiderBar extends Component {
                 </span>
               </span>
             }>
-            <Menu.Item key="2"><Link to='/form/hostelForm'>床位相关</Link></Menu.Item>
-            <Menu.Item key="3"><Link to='/form/foodForm'>菜单相关</Link></Menu.Item>
+            <Menu.Item key="2"><Link to='/app/form/hostelForm'>床位相关</Link></Menu.Item>
+            <Menu.Item key="3"><Link to='/app/form/foodForm'>菜单相关</Link></Menu.Item>
           </SubMenu>
           <SubMenu
             key="sub2"
@@ -49,8 +49,8 @@ class SiderBar extends Component {
               </span>
               </span>
             }>
-            <Menu.Item key="4"><Link to={`/order/hostelOrder/${this.state.age}`}>床位订单</Link></Menu.Item>
-            <Menu.Item key="5"><Link to='/order/foodOrder'>菜单相关</Link></Menu.Item>
+            <Menu.Item key="4"><Link to={`/app/order/hostelOrder/${this.state.age}`}>床位订单</Link></Menu.Item>
+            <Menu.Item key="5"><Link to='/app/order/foodOrder'>菜单相关</Link></Menu.Item>
           </SubMenu>
           <Menu.Item key="6">
             <Icon type="upload" />

@@ -2,9 +2,11 @@ import React from 'react';
 import {
   Router,
   Route,
-  BrowserRouter
+  BrowserRouter,
+  Switch
 } from 'react-router-dom'
 import App from '../App';
+import Login from '../pages/Login';
 import { Provider } from 'react-redux';
 import store from '../redux/store';
 
@@ -12,8 +14,10 @@ import store from '../redux/store';
 const routes = (
   <Provider store={store}>
     <BrowserRouter>
-      <App/>
-      {/* <Route exac path="/" component={App} /> */}
+      <div style={{width: '100%', height: '100%'}}>
+      <Route path="/app" component={App} />
+      <Route exact path="/" component={Login} />
+      </div>
     </BrowserRouter>
   </Provider>  
 )

@@ -1,0 +1,58 @@
+#login {
+  background: #5da3e3;
+  width: 100%;
+  height: 100%;
+}
+
+.login-wrap {
+  position: relative;
+  width: 400px;
+  top: 50%;
+  margin: 0 auto;
+  transform: translateY(-50%);
+}
+
+.login-toggle {
+  margin: 0 auto;
+  position: relative;
+  background: #fff;
+  // height: 100px;
+  width: 100%;
+  overflow: hidden;
+  // 用3D触发硬件渲染
+  // transform: translateZ(0);
+  border-bottom: 1px solid rgba(84, 164, 249, 0.71);
+}
+.toggle-login, .toggle-register {
+  cursor: pointer;
+  padding: 10px 0;
+  text-align: center;
+  float: left;
+  width: 50%;
+  box-sizing: border-box;
+  line-height: 35px;
+  font-size: 15px;
+}
+.bottom-line {
+  transition: .3s;
+  left: 0;
+  z-index: 100;
+  width: 100px;
+  position: absolute;
+  bottom: 0;
+  margin: 0 50px;
+  height: 0;
+  font-size: 0;
+  border: 2px solid rgba(84, 164, 249, 0.71);
+}
+.bottom-line.reg {
+  left: 200px;
+}
+
+section {
+  background: #fff;
+}
+
+.login-form-wrap {
+  padding: 30px 30px;
+}

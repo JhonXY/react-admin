@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'antd';
-import { Switch, Route, Link } from 'react-router-dom';
+// import { Row, Col } from 'antd';
+import { Link } from 'react-router-dom';
 import { Menu, Dropdown, Button, Icon } from 'antd';
 import { Input } from 'antd';
 import { Table } from 'antd';
@@ -136,12 +136,12 @@ class FoodForm extends Component {
               已选中 {selectedRowKeys.length} 个商品
             </span>
           </div>
-        : <div className="table-box">
-            <Dropdown className="table-head-drop" overlay={menu} trigger={['click']}>
-              <a href="">全部分类<Icon type="down" /></a>
-            </Dropdown>
-            <Button type="primary">新增</Button>
-          </div>
+          : <div className="table-box">
+              <Dropdown className="table-head-drop" overlay={menu} trigger={['click']}>
+                <a href="">全部分类<Icon type="down" /></a>
+              </Dropdown>
+              <Button type="primary">新增</Button>
+            </div>
       )
     }
 
