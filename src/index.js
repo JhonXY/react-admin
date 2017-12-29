@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import './index.scss';
+import './index.less';
 import routes from './common/router/router';
 import registerServiceWorker from './registerServiceWorker';
 

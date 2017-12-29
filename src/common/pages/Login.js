@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { message } from 'antd';
 // import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import './style/login.scss';
+import './style/login.less';
 import ForLogin from './ForLogin';
 import ForRegister from './ForRegister';
 // 如需要手动跳转，需使用高阶组件，通过withRouter传入history

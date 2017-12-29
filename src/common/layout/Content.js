@@ -45,11 +45,11 @@ class Contents extends Component {
       <Content 
         style={
         { margin: '24px 16px', 
-          padding: 24, 
+          padding: 24,
+          marginBottom: 0, 
           background: '#fff', 
-          minHeight: 300,
-          overflowY: 'scroll',
-          overflowX: 'scroll',
+          minHeight: 500,
+          overflowY: 'auto',
           minWidth: 1071}
         }>
         <Breadcrumb>
@@ -59,13 +59,13 @@ class Contents extends Component {
           {breads}
         </Breadcrumb>
         <Switch>
-          <Route exact path="/app" component={Index} />
-          <Route path='/app/form/hostelForm' component={HostelForm} />
-          <Route path='/app/form/foodForm' component={FoodForm} />
-          <Route path='/app/form/foodForm/change' component={FoodFormChange} />
-          <Route path='/app/form/foodForm/new' component={FoodFormNew} />
-          <Route path='/app/order/hostelOrder/:id' component={HostelOrder} />
-          <Route path='/app/order/foodOrder' component={FoodOrder} />
+          <Route path="/app/index" component={Index} />
+          <Route path='/app/hostelForm' component={HostelForm} />
+          <Route exact path='/app/foodForm' component={FoodForm} />
+          <Route path='/app/foodForm/change' component={FoodFormChange} />
+          <Route path='/app/foodForm/new' component={FoodFormNew} />
+          <Route path='/app/hostelOrder/:id' component={HostelOrder} />
+          <Route path='/app/foodOrder' component={FoodOrder} />
         </Switch>
       </Content>
     );

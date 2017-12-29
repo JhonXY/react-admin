@@ -2,6 +2,7 @@ const {
   injectBabelPlugin
 } = require('react-app-rewired');
 const rewireLess = require('react-app-rewire-less');
+const rewireSass = require('react-app-rewire-sass');
 
 module.exports = function override(config, env) {
   // do stuff with the webpack config...
@@ -18,5 +19,8 @@ module.exports = function override(config, env) {
   config = rewireLess.withLoaderOptions({
     modifyVars: { "@primary-color": "#1DA57A" },
   }) (config, env);
+
+  // 使用scss
+  // config = rewireSass(config, env);
   return config;
 };

@@ -1,9 +1,8 @@
 import React from 'react';
 import {
-  Router,
+  Redirect,
   Route,
   BrowserRouter,
-  Switch
 } from 'react-router-dom'
 import App from '../App';
 import Login from '../pages/Login';
@@ -15,8 +14,9 @@ const routes = (
   <Provider store={store}>
     <BrowserRouter>
       <div style={{width: '100%', height: '100%'}}>
+      <Redirect from="/" to="/login" />
       <Route path="/app" component={App} />
-      <Route exact path="/" component={Login} />
+      <Route path="/login" component={Login} />
       </div>
     </BrowserRouter>
   </Provider>  

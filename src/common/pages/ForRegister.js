@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Checkbox, Row, Col, Tooltip, Cascader,Radio } from 'antd';
+import { Form, Icon, Input, Button, Tooltip, Radio } from 'antd';
 import { message } from 'antd';
 import { register } from '../api/users';
 import { setStore } from '../utils/storage';
@@ -47,7 +47,7 @@ class ForRegister extends Component {
   // 用于密码处修改的保持相等
   // 获取密码框中鼠标的焦点
   handleConfirmBlur = (e) => {
-    const value = e.target.value;
+    // const value = e.target.value;
     // this.setState({ confirmDirty: this.state.confirmDirty || !!value });
     this.setState({ confirmDirty: true });
   }
