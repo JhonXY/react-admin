@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Switch, Route, Link, Redirect } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 import { Layout, Breadcrumb, Icon } from 'antd';
 
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 
 import Index from '../pages/Index';
 import HostelForm from '../pages/HostelForm';
@@ -28,17 +28,28 @@ class Contents extends Component {
   render() {
     let arr = window.location.pathname.split('/');
     arr.shift();
+    console.log(arr);
+    
     let breads = arr.map((item, index, arr) => {
-      let link = '';
-      for(let i=0; i<=index; i++) {
-        link = link+'/'+arr[i]
+      if(item === 'app'){
+        return (
+          <Breadcrumb.Item
+            key={index}>
+            <Link to="/app/index">{item}</Link>
+          </Breadcrumb.Item>
+        )
+      } else {
+        let link = '';
+        for (let i = 0; i <= index; i++) {
+          link = link + '/' + arr[i]
+        }
+        return (
+          <Breadcrumb.Item
+            key={index}>
+            <Link to={link}>{item}</Link>
+          </Breadcrumb.Item>
+        )
       }
-      return (
-        <Breadcrumb.Item 
-        key={index}>
-          <Link to={link}>{item}</Link>
-        </Breadcrumb.Item>
-      )
     })
 
     return (
@@ -53,8 +64,10 @@ class Contents extends Component {
           minWidth: 1071}
         }>
         <Breadcrumb>
-          <Breadcrumb.Item href="/">
-            <Icon type="home" />
+          <Breadcrumb.Item>
+            <Link to="/app/index">
+              <Icon type="home" />
+            </Link>
           </Breadcrumb.Item>
           {breads}
         </Breadcrumb>

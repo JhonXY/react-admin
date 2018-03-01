@@ -20,7 +20,7 @@ class Login extends Component {
 
   // 登录后跳转
   loginSuccess = () => {
-    this.props.history.push("/app");
+    this.props.history.push("/app/index");
   }
 
   render() {
