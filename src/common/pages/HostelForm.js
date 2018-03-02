@@ -44,7 +44,7 @@ class HostelForm extends Component {
   }
 
   // 利用箭頭函數直接取到class的this
-  handleSubmit=(e)=>{
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {

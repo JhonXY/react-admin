@@ -26,6 +26,7 @@ class Contents extends Component {
   }
 
   render() {
+    // 有待改善
     let arr = window.location.pathname.split('/');
     arr.shift();
     console.log(arr);
@@ -74,9 +75,10 @@ class Contents extends Component {
         <Switch>
           <Route path="/app/index" component={Index} />
           <Route path='/app/hostelForm' component={HostelForm} />
-          <Route exact path='/app/foodForm' component={FoodForm} />
+          {/* 为了子路由的匹配成功，子路由一定要写在父路由的前面 */}
           <Route path='/app/foodForm/change' component={FoodFormChange} />
           <Route path='/app/foodForm/new' component={FoodFormNew} />
+          <Route path='/app/foodForm' component={FoodForm} />
           <Route path='/app/hostelOrder/:id' component={HostelOrder} />
           <Route path='/app/foodOrder' component={FoodOrder} />
         </Switch>

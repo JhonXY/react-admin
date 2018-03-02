@@ -20,13 +20,16 @@ class FoodFormChange extends Component {
   }
 
   componentWillMount() {
+    let query = this.props.location.query
+    let { name, price, category, unit, tags } = query
     this.setState({ 
-      item: this.props.location.query,
-      name: this.props.location.query.name,
-      price: this.props.location.query.price,
-      category: this.props.location.query.category,
-      unit: this.props.location.query.unit,
-      tags: this.props.location.query.tags 
+      // item: this.props.location.query,
+      // name: this.props.location.query.name,
+      // price: this.props.location.query.price,
+      // category: this.props.location.query.category,
+      // unit: this.props.location.query.unit,
+      // tags: this.props.location.query.tags
+      item: query, name, price, category, unit, tags 
     });
     console.log(this.state.item); // 接收到传递来的行信息
   }

@@ -13,6 +13,7 @@
     "moment": "^2.20.1",
     "node-sass-chokidar": "^0.0.3",
     "react": "^16.1.1",
+    "react-amap": "^1.2.0",
     "react-dom": "^16.1.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

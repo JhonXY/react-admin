@@ -17,7 +17,8 @@ module.exports = function override(config, env) {
   }], config);
   // 定制antd组件处
   config = rewireLess.withLoaderOptions({
-    modifyVars: { "@primary-color": "#1DA57A" },
+    // 修改主色调
+    modifyVars: { "@primary-color": "#63abec" },
   }) (config, env);
 
   // 使用scss

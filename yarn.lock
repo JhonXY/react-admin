@@ -6050,6 +6050,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-amap@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-amap/-/react-amap-1.2.0.tgz#8d42d968e16aaf1a4ea9ba7117f7428a9f2e67ab"
+
 react-app-rewire-less@^2.1.0:
   version "2.1.0"
   resolved "http://registry.npm.taobao.org/react-app-rewire-less/download/react-app-rewire-less-2.1.0.tgz#1625c86a0dcfd9fcb0ba69aa7419f12a81cf5451"
