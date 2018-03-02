@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 // import { Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import { Menu, Dropdown, Button, Icon } from 'antd';
-import { Input } from 'antd';
+// import { Input } from 'antd';
 import { Table } from 'antd';
-import './style/foodForm.scss';
+import './style/foodForm.less';
 
 class FoodForm extends Component {
   state = { 
@@ -35,18 +35,22 @@ class FoodForm extends Component {
 
   render() {
     // 下拉菜单
+    const categorysArr = []
+    this.state.data.forEach((ele)=>{
+      if (categorysArr.indexOf(ele.category) === -1){
+        categorysArr.push(ele.category)
+      }
+    })
+    const menuItems = categorysArr.map((ele, i) => {
+      return (<Menu.Item key={i}>
+        <a target="_blank">{ele}</a>
+      </Menu.Item>)
+    })
     const menu = (
       <Menu>
-        {/* 这里循环分类输出item */}
-        <Menu.Item>
-          <a target="_blank">1st menu item</a>
-        </Menu.Item>
-        <Menu.Item>
-          <a target="_blank">2nd menu item</a>
-        </Menu.Item>
-        <Menu.Item>
-          <a target="_blank">3rd menu item</a>
-        </Menu.Item>
+        {
+          menuItems
+        }
       </Menu>
     );
 
@@ -100,7 +104,7 @@ class FoodForm extends Component {
               <Menu.Item>
                 <Link 
                   to={{
-                      pathname: "/form/foodForm/change",
+                      pathname: "/app/foodForm/change",
                       query: record
                   }}
                 >修改</Link>
@@ -140,7 +144,10 @@ class FoodForm extends Component {
               <Dropdown className="table-head-drop" overlay={menu} trigger={['click']}>
                 <a href="">全部分类<Icon type="down" /></a>
               </Dropdown>
-              <Button type="primary">新增</Button>
+              <Button type="primary">
+                <Link to="/app/foodForm/new">新增</Link>
+                {/* <Link to="/new">新增</Link> */}
+              </Button>
             </div>
       )
     }

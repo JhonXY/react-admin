@@ -8,7 +8,8 @@ class FooterBar extends Component {
   }
   render() {
     return (
-      <Footer>footer</Footer>
+      <Footer
+        style={{}}>footer</Footer>
     );
   }
 }

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Layout, Icon } from 'antd';
+import { HeaderBarR } from './HeaderBar'
+
 const { Header } = Layout;
 
 class HeaderBar extends Component {
@@ -14,7 +16,7 @@ class HeaderBar extends Component {
           type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={this.props.toggle}
         />
-        header
+        <HeaderBarR></HeaderBarR>
       </Header>
     );
   }

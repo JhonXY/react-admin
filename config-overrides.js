@@ -2,6 +2,7 @@ const {
   injectBabelPlugin
 } = require('react-app-rewired');
 const rewireLess = require('react-app-rewire-less');
+const rewireSass = require('react-app-rewire-sass');
 
 module.exports = function override(config, env) {
   // do stuff with the webpack config...
@@ -16,7 +17,11 @@ module.exports = function override(config, env) {
   }], config);
   // 定制antd组件处
   config = rewireLess.withLoaderOptions({
-    modifyVars: { "@primary-color": "#1DA57A" },
+    // 修改主色调
+    modifyVars: { "@primary-color": "#63abec" },
   }) (config, env);
+
+  // 使用scss
+  // config = rewireSass(config, env);
   return config;
 };

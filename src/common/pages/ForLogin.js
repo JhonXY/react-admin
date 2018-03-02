@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { message } from 'antd';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import './style/forlogin.scss';
+import './style/forlogin.less';
 import { login } from '../api/users';
 import { setStore } from '../utils/storage';
 

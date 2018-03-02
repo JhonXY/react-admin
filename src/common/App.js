@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { Button } from 'antd';
 import { Layout } from 'antd';
-import './app.scss';
+import './app.less';
 
 import Sider from './layout/Sider';
 import Header from './layout/Header';

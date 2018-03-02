@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Router,
+  Redirect,
   Route,
   BrowserRouter,
   Switch
@@ -15,8 +15,13 @@ const routes = (
   <Provider store={store}>
     <BrowserRouter>
       <div style={{width: '100%', height: '100%'}}>
-      <Route path="/app" component={App} />
-      <Route exact path="/" component={Login} />
+        <Switch>
+          <Route path="/app" component={App} />
+          <Route path="/login" component={Login} />
+          {/* 重定向一定要写在重定向的路由后面 */}
+          <Redirect from="/" to="/login" />
+          {/*404的Route则放到最后*/}
+        </Switch>
       </div>
     </BrowserRouter>
   </Provider>  

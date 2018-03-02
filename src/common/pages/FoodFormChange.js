@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Tooltip, Tag, Input } from 'antd';
 import { Select, Form, Button } from 'antd';
 import { Upload, Icon } from 'antd';
-import './style/foodFormChange.scss';
+import './style/foodFormChange.less';
 const { Option } = Select; 
 const FormItem = Form.Item; 
 
@@ -20,13 +20,16 @@ class FoodFormChange extends Component {
   }
 
   componentWillMount() {
+    let query = this.props.location.query
+    let { name, price, category, unit, tags } = query
     this.setState({ 
-      item: this.props.location.query,
-      name: this.props.location.query.name,
-      price: this.props.location.query.price,
-      category: this.props.location.query.category,
-      unit: this.props.location.query.unit,
-      tags: this.props.location.query.tags 
+      // item: this.props.location.query,
+      // name: this.props.location.query.name,
+      // price: this.props.location.query.price,
+      // category: this.props.location.query.category,
+      // unit: this.props.location.query.unit,
+      // tags: this.props.location.query.tags
+      item: query, name, price, category, unit, tags 
     });
     console.log(this.state.item); // 接收到传递来的行信息
   }
@@ -141,8 +144,7 @@ class FoodFormChange extends Component {
             {getFieldDecorator('foodname', {
               initialValue: good.name,
               rules: [{ required: true, message: '请输入商品名' }],
-            })
-            (
+            })(
               <Input onChange={this.handleNameChange}/>
             )}
           </FormItem>
@@ -153,8 +155,7 @@ class FoodFormChange extends Component {
             {getFieldDecorator('foodprice', {
               initialValue: good.price,
               rules: [{ required: true, message: '请输入商品售价' }],
-            })
-            (
+            })(
               <Input onChange={this.handlePriceChange}/>
             )}
           </FormItem>
@@ -165,8 +166,7 @@ class FoodFormChange extends Component {
             {getFieldDecorator('foodcategory', {
               initialValue: good.category,
               rules: [{ required: true, message: '请输入商品分类' }],
-            })
-            (
+            })(
               <Input onChange={this.handleCategoryChange}/>
             )}
           </FormItem>
@@ -177,8 +177,7 @@ class FoodFormChange extends Component {
             {getFieldDecorator('foodunit', {
               initialValue: good.unit,
               rules: [{ required: true }],
-            })
-            (
+            })(
               <Select onChange={this.handleUnitChange}>
                 <Option value="袋">袋</Option>
                 <Option value="盘">盘</Option>
