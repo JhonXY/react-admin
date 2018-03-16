@@ -6,7 +6,7 @@ import ForLogin from './ForLogin';
 import ForRegister from './ForRegister';
 // 如需要手动跳转，需使用高阶组件，通过withRouter传入history
 import { withRouter } from "react-router-dom"; 
-
+import { setStore } from '../utils/storage';
 
 class Login extends Component {
   state = { 
@@ -19,8 +19,9 @@ class Login extends Component {
   }
 
   // 登录后跳转
-  loginSuccess = () => {
-    this.props.history.push("/app/index");
+  loginSuccess = (query) => {
+    setStore('shopInfo', query) 
+    this.props.history.push("/app/index", { query });
   }
 
   render() {

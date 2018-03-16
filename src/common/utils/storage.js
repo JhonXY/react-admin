@@ -12,9 +12,13 @@ export const setStore = (name, content) => {
 /**
  * 获取localStorage
  */
+// export const getStore = name => {
+//   if (!name) return;
+//   return window.localStorage.getItem(name);
+// }
 export const getStore = name => {
   if (!name) return;
-  return window.localStorage.getItem(name);
+  return JSON.parse(window.localStorage.getItem(name));
 }
 
 /**

@@ -5,7 +5,7 @@ class HasShop extends Component {
   render() { 
     return ( 
     <div >
-
+      有店
     </div>  
     )
   }

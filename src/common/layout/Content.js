@@ -29,7 +29,6 @@ class Contents extends Component {
     // 有待改善
     let arr = window.location.pathname.split('/');
     arr.shift();
-    console.log(arr);
     
     let breads = arr.map((item, index, arr) => {
       if(item === 'app'){

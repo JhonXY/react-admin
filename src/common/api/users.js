@@ -20,15 +20,29 @@ export function register(data) {
   })
 }
 
-// 测试
-export function userInfo(data) {
+// 基本店铺信息录入
+export function shopInfo(data) {
   const token = getStore('token')
+
   return fetch({
-    url: '/users/login',
-    method: 'get',
+    url: '/shops/subInfos',
+    method: 'post',
     headers: {
-      'Authorization': 'Bearer'+token
+      'Authorization': 'Bearer' + token.token
     },
     data
   })
 }
+
+// 测试
+// export function userInfo(data) {
+//   const token = getStore('token')
+//   return fetch({
+//     url: '/users/login',
+//     method: 'get',
+//     headers: {
+//       'Authorization': 'Bearer'+token
+//     },
+//     data
+//   })
+// }
