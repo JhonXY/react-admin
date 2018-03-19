@@ -5,6 +5,9 @@
   "proxy": {
     "/users/*": {
       "target": "http://localhost:3001"
+    },
+    "/shops/*": {
+      "target": "http://localhost:3001"
     }
   },
   "dependencies": {

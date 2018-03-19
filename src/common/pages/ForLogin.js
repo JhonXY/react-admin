@@ -23,10 +23,12 @@ class ForLogin extends Component {
         }).then(result => {
           let res = result.data
           if(res.code === 1){
-            setStore('token', res.bean) 
+            setStore('token', res.bean)
+            // 保存用户信息 
+            setStore('userInfo', res.userInfo.user) 
             // message的参数可有三个 信息内容，消失时间，消失后的回调
-            message.success('登录成功', 2,()=>{
-              loginSuc()
+            message.success('登录成功', 2,() => {
+              loginSuc(res.shopInfo)
             })
           } else {
             message.error('登录失败')

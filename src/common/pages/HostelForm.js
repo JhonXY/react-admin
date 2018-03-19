@@ -5,6 +5,8 @@ import { TimePicker } from 'antd';
 import { Table } from 'antd';
 import moment from 'moment';
 import './style/form.less';
+import { getStore } from '../utils/storage';
+import { subHostel, getHotels } from '../api/hostels';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -12,14 +14,22 @@ const Option = Select.Option;
 
 class HostelForm extends Component {
   state = {
+    // 表单相关控制初始化
     tuichecked: true, //是否可退 
     brechecked: true, //是否有早餐 
     disabled: true, // 控制何时可退后的输入框是否可用 
   }
 
+  componentDidMount(){
+    let shop = getStore('shopInfo')
+    getHotels({
+      shopId: shop.id
+    }).then( res => {
+      console.log(res);
+    })
+  }
+
   toggleDisabled = (e) => {
-    console.log(e);
-    
     switch(true){
       case e.target.id === 'hostelCantui':
         this.setState({
@@ -49,9 +59,28 @@ class HostelForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 此处做提交处理
-        
-        values.hostelTuidate = values.hostelTuidate['_d'].toLocaleTimeString()
+        if (values.hostelTuidate) values.hostelTuidate = values.hostelTuidate['_d'].toLocaleTimeString()
         console.log('Received values of form: ', values);
+        let shop = getStore('shopInfo')
+        let obj = {
+          name: values.hostelBedType,
+          intro: values.hostelBedDetail,
+          breakfast: values.hostelBrenum,
+          price: values.hostelPrice,
+          cancel: values.hostelCantui,
+          cancelDate: values.hostelTuidate,
+          equipments: [
+            values.hostelEquipment_bathroom,
+            values.hostelEquipment_net,
+            values.hostelEquipment_wifi
+          ],
+          left: values.hostelNum,
+          shopId: shop.id
+        }
+        subHostel(obj).then(res => {
+          console.log(res);
+        })
+        
       }
     });
   }
@@ -178,7 +207,7 @@ class HostelForm extends Component {
           return (
             <FormItem
               key={i}>
-              {getFieldDecorator(`hostelEquipment-${ele.name}`, {})(
+              {getFieldDecorator(`hostelEquipment_${ele.name}`, {})(
                   <Checkbox onChange={_this.onChange}>{ele.show}</Checkbox>
               )}
             </FormItem>
@@ -202,7 +231,7 @@ class HostelForm extends Component {
               <FormItem
                 {...formItemLayout}
                 label="可住人数">
-                {getFieldDecorator('hostelNum', {
+                {getFieldDecorator('hostelPeoNum', {
                   initialValue: 2,
                   rules: [{ required: true, message: '请输入可住人数' }],
                 })(
@@ -249,31 +278,54 @@ class HostelForm extends Component {
               </Row>
               <Row className="form-title">床型</Row>
               <FormItem>
-                <Select defaultValue="大床" style={{ width: 120 }} onChange={_this.onChange}>
+                {getFieldDecorator('hostelBedType', {
+                  initialValue: '大床'
+                })(
+                  <Select style={{ width: 120 }} onChange={_this.onChange}>
+                    <Option value="大床">大床</Option>
+                    <Option value="单人床">单人床</Option>
+                    <Option value="双床">双床</Option>
+                    <Option value="其他">其他</Option>
+                  </Select>
+                )}
+                {/* <Select defaultValue="大床" style={{ width: 120 }} onChange={_this.onChange}>
                   <Option value="大床">大床</Option>
                   <Option value="单人床">单人床</Option>
                   <Option value="双床">双床</Option>
                   <Option value="其他">其他</Option>
-                </Select>
+                </Select> */}
               </FormItem>
               <FormItem 
                 {...formItemLayout}
                 label="具体床型">
-                <Input placeholder="床型，尺寸等" style={{ width: '50%' }} />
+                {getFieldDecorator('hostelBedDetail', {})(
+                  <Input placeholder="床型，尺寸等" style={{ width: '50%' }} />
+                )}
               </FormItem>
               <Row className="form-title">房情</Row>
               <FormItem 
                 label="具体房价"
                 {...formItemLayout}>
-                <InputNumber
-                  min={1} defaultValue={100} formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={value => value.replace(/\$\s?|(,*)/g, '')} onChange={this.onChange} />
+                {getFieldDecorator('hostelPrice', {
+                  initialValue: 100,
+                  rules: [{ required: true, message: '请输入具体房价' }],
+                })(
+                  <InputNumber
+                    formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={value => value.replace(/\$\s?|(,*)/g, '')} onChange={this.onChange} />
+                )}
                 <br />
               </FormItem>
               <FormItem 
                 {...formItemLayout}
                 label="可订总数">
-                <InputNumber min={1} defaultValue={2} onChange={this.onChange} />
+                {getFieldDecorator('hostelNum', {
+                  initialValue: 2,
+                  min: 1,
+                  rules: [{ required: true, message: '请输入可订总数' }],
+                })(
+                  <InputNumber min={1} onChange={this.onChange} />
+                )}
               </FormItem>
               <FormItem>
                 <Button
