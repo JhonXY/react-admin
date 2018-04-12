@@ -16,9 +16,15 @@ export const setStore = (name, content) => {
 //   if (!name) return;
 //   return window.localStorage.getItem(name);
 // }
+// export const getStore = name => {
+//   if (!name) return;
+//   return JSON.parse(window.localStorage.getItem(name));
+// }
 export const getStore = name => {
-  if (!name) return;
-  return JSON.parse(window.localStorage.getItem(name));
+  if (!name) return
+  var local = window.localStorage.getItem(name)
+  if (!local) return
+  return JSON.parse(local);
 }
 
 /**

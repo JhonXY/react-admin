@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-// import { Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
-import { Menu, Dropdown, Button, Icon } from 'antd';
-// import { Input } from 'antd';
+import { Menu, Dropdown, Button, Icon, Popconfirm,message } from 'antd';
 import { Table } from 'antd';
+import { getStore } from '../utils/storage'
+import { getFoodItems, delFoodItem } from '../api/foods';
 import './style/foodForm.less';
 
 class FoodForm extends Component {
@@ -18,48 +18,56 @@ class FoodForm extends Component {
   }
 
   componentWillMount() {
-    const data = [];
-    for (let i = 0; i < 50; i++) {
-      data.push({
-        key: i,
-        name: `啦啦啦 ${i}`,
-        category: 'lalala',
-        img: "https://oimageb7.ydstatic.com/image?id=8890261127673308097&product=dict-homepage&w=200&h=150&fill=0&cw=200&ch=150&sbc=0&cgra=CENTER",
-        unit: '件',
-        price: 123,
-        tags: ['产品热销', '最新上架'],
-      });
-    }
-    this.setState({data})
+    this.getData()
+  }
+
+  getData(){
+    let shop = getStore('shopInfo')
+    getFoodItems({ shopId: shop.id }).then(res => {
+      if (res.data.success) {
+        this.setState({ data: res.data.data })
+      }
+    })  
+  }
+
+  delFood(id) { 
+    delFoodItem({ id }).then(res => {
+      if (res.data.success) {
+        message.success('该记录已删除')
+        this.getData()
+        // this.setState({ data: res.data.data })
+      }
+    })  
   }
 
   render() {
     // 下拉菜单
     const categorysArr = []
-    this.state.data.forEach((ele)=>{
-      if (categorysArr.indexOf(ele.category) === -1){
-        categorysArr.push(ele.category)
-      }
-    })
+    if(this.state.data !== null){
+      this.state.data.forEach((ele) => {
+        if (categorysArr.indexOf(ele.category) === -1) {
+          categorysArr.push(ele.category)
+        }
+      })
+    }
+    
     const menuItems = categorysArr.map((ele, i) => {
-      return (<Menu.Item key={i}>
-        <a target="_blank">{ele}</a>
-      </Menu.Item>)
+      return (
+        <Menu.Item key={i}>
+          <a target="_blank">{ele}</a>
+        </Menu.Item>
+      )
     })
     const menu = (
-      <Menu>
-        {
-          menuItems
-        }
-      </Menu>
+      <Menu>{menuItems}</Menu>
     );
 
     // 表格列配置
     // 如果是可滑动表格则必须width，不然会不对齐
-    const columns = [
-      {
+    const columns = [{
         title: '商品图片',
-        dataIndex: 'img',
+        key: 'img',
+        dataIndex: 'imgdata',
         width: 150,
         render: (text, record, index) => {
           return (
@@ -71,19 +79,23 @@ class FoodForm extends Component {
         },
       }, {
         title: '商品分类',
+        key: 'category',
         dataIndex: 'category',
         width: 150
       }, {
         title: '商品名称',
         dataIndex: 'name',
+        key: 'name',
         width: 150
       }, {
         title: '单位',
         dataIndex: 'unit',
+        key: 'unit',
         width: 150
       }, {
         title: '商品售价',
         dataIndex: 'price',
+        key: 'price',
         width: 150,
         render: (text)=>{
           return (
@@ -92,10 +104,12 @@ class FoodForm extends Component {
         }
       }, {
         title: '商品标签',
-        dataIndex: 'tags',
+        dataIndex: 'tips',
+        key: 'tips',
         width: 150
       }, {
         title: '操作',
+        key: 'action',
         width: 50,
         render: (text, record, index)=>{
           // 更多操作下拉
@@ -110,25 +124,28 @@ class FoodForm extends Component {
                 >修改</Link>
               </Menu.Item>
               <Menu.Item>
-                <a target="_blank">删除</a>
+                {/* 不知为何这里一定要用() => this.delFoodItem(record.id)这种写法 */}
+                <Popconfirm title="是否确定删除该菜品?" onConfirm={() => this.delFood(record.id)}>
+                  <a href="javascript:;">删除</a>
+                </Popconfirm>
               </Menu.Item>
             </Menu>
           );
           return (
             <Dropdown overlay = {moreMenu}>
-              <span>< Icon type = "plus"style = {{fontSize: 16,color: '#08c'}}/></span >
+              <span>< Icon type = "plus"style = {{fontSize: 16,color: '#08c', cursor: 'pointer'}}/></span >
             </Dropdown>
           )
         }
-      }
-    ];
-
+      }]
+    
     // 获取到选中行
-    const { selectedRowKeys } = this.state;
+    let { selectedRowKeys } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
+
     // 判断是否有行被选中
     const hasSelected = selectedRowKeys.length > 0;
 
