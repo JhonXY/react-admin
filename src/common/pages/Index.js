@@ -7,6 +7,7 @@ import HasShop from './index/HasShop';
 import NoShop from './index/NoShop';
 
 import { getStore } from '../utils/storage';
+import { userHasShop } from '../api/users';
 class Index extends Component {
   // state = {
     // 从此获取history跳转中传的参数
@@ -15,13 +16,21 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasShop: this.props.location.state.query ? true : false, // 是否已有店铺 
-      // hasShop: () => {
-      //   this.props.location.state.query ? true : false, // 是否已有店铺
-      // }
+      hasShop: false, // 是否已有店铺 
     };
   }
-
+  componentWillMount(){
+    let storage = getStore('userInfo')
+    if(storage) {
+      userHasShop({
+        id: storage.id
+      }).then(res => {
+        if(res.data.hasShop){
+          this.shopStatus()
+        }
+      })
+    }
+  }
   shopStatus = () => {
     this.setState({
       hasShop: !this.state.hasShop

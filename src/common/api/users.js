@@ -34,6 +34,21 @@ export function shopInfo(data) {
   })
 }
 
+
+// 是否拥有店铺
+export function userHasShop(params) {
+  const token = getStore('token')
+
+  return fetch({
+    url: '/users/hasShop',
+    method: 'get',
+    headers: {
+      'Authorization': 'Bearer' + token.token
+    },
+    params
+  })
+}
+
 // 测试
 // export function userInfo(data) {
 //   const token = getStore('token')

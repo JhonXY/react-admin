@@ -1,37 +1,45 @@
 import React, { Component } from 'react';
-import { Tooltip, Tag, Input } from 'antd';
+import { Tooltip, Tag, Input, message } from 'antd';
 import { Select, Form, Button } from 'antd';
 import { Upload, Icon } from 'antd';
+import { getStore } from '../utils/storage'
+import { withRouter, Link } from "react-router-dom"; 
 import './style/foodFormChange.less';
 const { Option } = Select; 
 const FormItem = Form.Item; 
 
+// base64转码
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
 class FoodFormChange extends Component {
   state = { 
     item: null,
     name: null,
     price: null,
     category: null,
-    unit: null,
-    tags: [],
+    unit: '个',
+    tips: [],
     intro: '',
     inputVisible: false, // 控制小标的输入输出
     inputValue: '',
+    imgdata: '',
+    filelist: [],
+    loading: false,
   }
 
   componentWillMount() {
     let query = this.props.location.query
-    let { name, price, category, unit, tags } = query
-    this.setState({ 
-      // item: this.props.location.query,
-      // name: this.props.location.query.name,
-      // price: this.props.location.query.price,
-      // category: this.props.location.query.category,
-      // unit: this.props.location.query.unit,
-      // tags: this.props.location.query.tags
-      item: query, name, price, category, unit, tags 
-    });
-    console.log(this.state.item); // 接收到传递来的行信息
+    if (query){
+      let { name, price, category, unit, tips, introduction, imgdata } = query
+      let tipsArr = tips.split(' ')
+      this.setState({
+        name, price, category, unit, imgdata, tips: tipsArr, intro: introduction
+      });
+    }
+    // console.log(this.state.item); // 接收到传递来的行信息
   }
 
   componentDidMount() {
@@ -103,21 +111,44 @@ class FoodFormChange extends Component {
   saveInputRef = input => this.input = input
   
   // 上传文件
-  normFile = (e) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
+  // normFile = (e) => {
+  //   console.log('Upload event:', e);
+  //   if (Array.isArray(e)) {
+  //     return e;
+  //   }
+  //   return e && e.fileList;
+  // }
+  beforeUpload = (file) => {
+    const isPic = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isPic) {
+      message.error('你只能上传png或jpg的图片!');
     }
-    return e && e.fileList;
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('图片大小不得大于2MB!');
+    }
+    return isLt2M && isPic;
+  }
+  handleUpload = (info) => {
+    if (info.file.status === 'uploading') {
+      this.setState({ loading: true });
+      getBase64(info.file.originFileObj, imgdata => {
+        info.file.status === 'done'
+        this.setState({ imgdata, loading: false, }, () => {
+          console.log(this.state);
+        })
+      });
+      // return;
+    }
   }
 
   render() {
     const good =this.state.item
     
     const tags = 
-      this.state.tags.length === 0
+      this.state.tips.length === 0
         ? <span style={{ marginRight : 10}}>暂无标签</span>
-        : this.state.tags.map((tag,index)=>{
+        : this.state.tips.map((tag,index)=>{
           const isLongTag = tag.length > 20;
           const tagElem = (
             <Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>
@@ -127,11 +158,13 @@ class FoodFormChange extends Component {
           return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
         })
 
-    const { getFieldDecorator, getFieldsError } = this.props.form;
+    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
     // 只有在触发过后才会报错
     // const userNameError = isFieldTouched('userName') && getFieldError('userName');
-
+    const nameError = isFieldTouched('name') && getFieldError('name');
+    const priceError = isFieldTouched('price') && getFieldError('price');
+    const categoryError = isFieldTouched('category') && getFieldError('category');
 
     const { inputVisible, inputValue } = this.state;
     return ( 
@@ -140,9 +173,11 @@ class FoodFormChange extends Component {
         <div className="change-items clearfloat">
         <div className="change-item">
           <FormItem
+            validateStatus={nameError ? 'error' : ''}
+            help={nameError || ''}
             label=' 商品名:'>
-            {getFieldDecorator('foodname', {
-              initialValue: good.name,
+            {getFieldDecorator('name', {
+              initialValue: this.state.name,
               rules: [{ required: true, message: '请输入商品名' }],
             })(
               <Input onChange={this.handleNameChange}/>
@@ -151,9 +186,11 @@ class FoodFormChange extends Component {
         </div>
         <div className="change-item">
           <FormItem
+            validateStatus={priceError ? 'error' : ''}
+            help={priceError || ''}
             label='商品售价:'>
-            {getFieldDecorator('foodprice', {
-              initialValue: good.price,
+            {getFieldDecorator('price', {
+              initialValue: this.state.price,
               rules: [{ required: true, message: '请输入商品售价' }],
             })(
               <Input onChange={this.handlePriceChange}/>
@@ -162,9 +199,11 @@ class FoodFormChange extends Component {
         </div>
         <div className="change-item">
           <FormItem
+            validateStatus={categoryError ? 'error' : ''}
+            help={categoryError || ''}
             label='商品分类:'>
-            {getFieldDecorator('foodcategory', {
-              initialValue: good.category,
+            {getFieldDecorator('category', {
+              initialValue: this.state.category,
               rules: [{ required: true, message: '请输入商品分类' }],
             })(
               <Input onChange={this.handleCategoryChange}/>
@@ -174,8 +213,8 @@ class FoodFormChange extends Component {
         <div className="change-item">
           <FormItem
             label='计量单位:'>
-            {getFieldDecorator('foodunit', {
-              initialValue: good.unit,
+            {getFieldDecorator('unit', {
+              initialValue: this.state.unit,
               rules: [{ required: true }],
             })(
               <Select onChange={this.handleUnitChange}>
@@ -213,6 +252,14 @@ class FoodFormChange extends Component {
               disabled={this.hasErrors(getFieldsError())}>
               提交更新
             </Button>
+            <Button
+              style={{marginLeft: 20}}
+              type="primary"
+            >
+              <Link 
+                to={{pathname: "/app/foodForm",}}
+              >返回</Link>
+            </Button>
           </FormItem>
         </div>
         </div>
@@ -221,7 +268,7 @@ class FoodFormChange extends Component {
             <li>
               <div className="watch-title">商品图片</div>
               <div className="watch-content">
-                <img src="https://oimageb7.ydstatic.com/image?id=8890261127673308097&product=dict-homepage&w=200&h=150&fill=0&cw=200&ch=150&sbc=0&cgra=CENTER" alt=""/>
+                <img src={this.state.imgdata} alt=""/>
               </div>
             </li>
             <li>
@@ -248,14 +295,8 @@ class FoodFormChange extends Component {
         </div>
         <div className="change-footer">
           <div className="change-upload">
-            <FormItem
-              label="图片上传"
-              formItemLayout={{
-                labelCol: {span: 6 },
-                wrapperCol: {span: 14 },
-              }}>
               <div className="dropbox" style={{ width: 200 }}>
-                {getFieldDecorator('dragger', {
+                {/* {getFieldDecorator('dragger', {
                   valuePropName: 'fileList',
                   getValueFromEvent: this.normFile,
                 })(
@@ -265,9 +306,20 @@ class FoodFormChange extends Component {
                     </p>
                     <p className="ant-upload-text">点击或拖拽图片上传</p>
                   </Upload.Dragger>
-                  )}
+                  )} */}
+                  <Upload.Dragger
+                    name="pic"
+                    listType="picture-card"
+                    fileList={this.state.filelist}
+                    beforeUpload={this.beforeUpload}
+                    onChange={this.handleUpload}
+                  >
+                    <p className="ant-upload-drag-icon">
+                      <Icon type="plus" style={{ fontSize: 80, marginTop: 10 }} />
+                    </p>
+                    <p className="ant-upload-text">点击或拖拽图片上传</p>
+                  </Upload.Dragger>
               </div>
-            </FormItem>
           </div>
           <div className="change-text-area">
             <FormItem
