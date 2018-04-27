@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Table } from 'antd';
 // import socket from '../api/socket';
-class FoodOrder extends Component {
-  state = {  }
+class OrderTable extends Component {
+  state = {}
 
   componentWillMount() {
   }
@@ -13,4 +14,4 @@ class FoodOrder extends Component {
   }
 }
 
-export default FoodOrder;
+export default OrderTable;

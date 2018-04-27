@@ -25,7 +25,20 @@ class ForLogin extends Component {
           if(res.code === 1){
             setStore('token', res.bean)
             // 保存用户信息 
-            setStore('userInfo', res.userInfo.user) 
+            setStore('userInfo', res.userInfo.user)
+
+            // 开始连接socket
+            // 获取该连接的socketId
+            // socket.emit('login', {
+            //   userId: res.userInfo.user.id
+            // }, (res) => {
+            // })
+
+            // socket.on('loginEnd', (res) => {
+            //   console.log('login socket');
+            //   console.log(res);
+            // })
+
             // message的参数可有三个 信息内容，消失时间，消失后的回调
             message.success('登录成功', 2,() => {
               loginSuc(res.shopInfo)
