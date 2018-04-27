@@ -23,3 +23,68 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+.barRList {
+  margin-right: 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  li {
+    margin-left: 20px;
+  }
+  .num {
+    height: 16px;
+    opacity: 1;
+    padding: 2px 4px;
+    position: absolute;
+    top: 12px;
+    right: -5px;
+    min-width: 8px;
+    background: #F66239;
+    text-align: center;
+    font-family: initial;
+    font-size: 12px;
+    line-height: 13px;
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+  }
+  .num.none {
+    opacity: 0;
+  }
+}
+
+@keyframes bellshake {
+  0% {
+    transform: rotate(0deg);
+  }
+  5% {
+      transform: rotate(18deg);
+  }
+  15% {
+      transform: rotate(-15deg);
+  }
+  25% {
+      transform: rotate(12deg);
+  }
+  35% {
+      transform: rotate(-9deg);
+  }
+  45% {
+      transform: rotate(6deg);
+  }
+  55% {
+      transform: rotate(-3deg);
+  }
+  60% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(0deg);
+  }
+}
+
+.bell {
+  animation: bellshake 2s linear 0s infinite;
+  transform-origin: top center;
+}

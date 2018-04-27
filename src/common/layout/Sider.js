@@ -7,7 +7,6 @@ const { SubMenu } = Menu;
 
 class SiderBar extends Component {
   state = { 
-    age: 'fuck'
   }
   render() {
     return (
@@ -49,8 +48,8 @@ class SiderBar extends Component {
               </span>
               </span>
             }>
-            <Menu.Item key="4"><Link to={`/app/hostelOrder/${this.state.age}`}>床位订单</Link></Menu.Item>
-            <Menu.Item key="5"><Link to='/app/foodOrder'>菜单相关</Link></Menu.Item>
+            <Menu.Item key="4"><Link to='/app/orderTable'>查看订单</Link></Menu.Item>
+            {/* <Menu.Item key="5"><Link to='/app/foodOrder'>菜单相关</Link></Menu.Item> */}
           </SubMenu>
           <Menu.Item key="6">
             <Icon type="upload" />

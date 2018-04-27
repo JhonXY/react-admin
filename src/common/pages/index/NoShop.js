@@ -4,13 +4,14 @@ import { Map } from 'react-amap';
 import { Steps, Button, message } from 'antd';
 import { Form, Input } from 'antd';
 import { Row, Col } from 'antd';
-
+import { Spin, Icon, Card } from 'antd';
 // api
 import { shopInfo } from '../../api/users';
 import { getStore } from '../../utils/storage';
 
 const Step = Steps.Step;
 const FormItem = Form.Item;
+// 自定义加载
 
 class NoShop extends Component {
   constructor(props) {
@@ -18,7 +19,8 @@ class NoShop extends Component {
     this.state = {
       current: 0,
       intro: '请介绍一下您的店铺！',
-      center: { longitude: 115, latitude: 30 },
+      center: { longitude: 0, latitude: 0 },
+      getCenter: 0,
       mapInstance: {},
       forForm: {}
     };
@@ -56,13 +58,18 @@ class NoShop extends Component {
           str.push('精度：' + data.accuracy + ' 米');
          }//如为IP精确定位结果则没有精度信息
         str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
+        // console.log(str);
         _this.setState({
           center: { longitude: data.position.getLng(), latitude: data.position.getLat() },
+          getCenter: 1
         })
       }
           //解析定位错误信息
       function onError(data) {
         console.log('定位失败');
+        _this.setState({
+          getCenter: -1
+        })
       }
     });
   }
@@ -154,6 +161,30 @@ class NoShop extends Component {
         sm: { span: 16 },
       },
     };
+
+    const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+    const centerShow = ()=>{
+      let data = this.state.getCenter
+      switch (true) {
+        case data === 0:
+          return (
+            <div>正在获取当前定位 <Spin style={{ marginLeft: 15}} indicator={antIcon} size="small" /></div>
+            // <Card loading={true} title="当前经纬度">
+            //   {/* 经度：{this.state.longitude} ，纬度：{this.state.latitude} */}
+            // </Card>
+          )
+        case data === -1:
+          return (
+            <div>获取定位失败，请检查网络或清理缓存！</div>
+          )
+        case data === 1:
+          return (
+            <Card title="当前经纬度">
+              经度：{this.state.center.longitude} ，纬度：{this.state.center.latitude}
+            </Card>
+          )
+      }
+    }
 
     return (
       <div className="mt-15 no-shop">
@@ -287,7 +318,9 @@ class NoShop extends Component {
             <div className="step-2">
               <Row type="flex" justify="space-around" align="middle">
                 <Col span={8}>
-                  <div></div>
+                  <div className="left-wrap">
+                    {centerShow()}
+                  </div>
                 </Col>
                 <Col span={8}>
                   <div className="map-wrap">
