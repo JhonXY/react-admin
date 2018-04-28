@@ -8,6 +8,9 @@
     },
     "/shops/*": {
       "target": "http://localhost:3001"
+    },
+    "/orders/*": {
+      "target": "http://localhost:3001"
     }
   },
   "dependencies": {
