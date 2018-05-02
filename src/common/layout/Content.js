@@ -11,7 +11,7 @@ import FoodFormChange from '../pages/FoodFormChange';
 import FoodFormNew from '../pages/FoodFormNew';
 import HostelOrder from '../pages/HostelOrder';
 import FoodOrder from '../pages/FoodOrder';
-// import OrderTable from '../pages/OrderTable';
+import OrderTable from '../pages/OrderTable';
 
 const { Content } = Layout;
 
@@ -81,7 +81,7 @@ class Contents extends Component {
           <Route path='/app/foodForm' component={FoodForm} />
           <Route path='/app/hostelOrder/:id' component={HostelOrder} />
           <Route path='/app/foodOrder' component={FoodOrder} />
-          {/* <Route path='/app/orderTable' component={orderTable} /> */}
+          <Route path='/app/orderTable' component={OrderTable} />
         </Switch>
       </Content>
     );
