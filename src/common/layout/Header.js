@@ -22,9 +22,9 @@ class HeaderBar extends Component {
 
     socket.on('newOrder', (res) => {
       console.log('get newOrder');
+      let { newNum } = this.state
       this.setState({
-        newNum: this.state.newNum+=1
-      }, ()=>{
+        newNum: newNum+=1
       })
     })
   }

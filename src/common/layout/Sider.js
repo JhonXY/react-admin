@@ -11,8 +11,10 @@ class SiderBar extends Component {
   render() {
     return (
       <Sider
+        breakpoint="lg"
         // 自定义触发隐藏默认设定
         trigger={null}
+        collapsedWidth="0"
         collapsible
         collapsed={this.props.collapsed}
         // style={{ height: 100% }}

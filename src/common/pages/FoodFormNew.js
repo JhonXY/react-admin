@@ -143,7 +143,7 @@ class FoodFormNew extends Component {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       getBase64(info.file.originFileObj, imgdata => {
-        info.file.status === 'done'
+        // info.file.status === 'done'
         this.setState({ imgdata, loading: false, }, ()=>{
           console.log(this.state);
         })

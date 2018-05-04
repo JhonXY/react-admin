@@ -5,7 +5,7 @@ import './style/login.less';
 import ForLogin from './ForLogin';
 import ForRegister from './ForRegister';
 // 如需要手动跳转，需使用高阶组件，通过withRouter传入history
-import { withRouter } from "react-router-dom"; 
+// import { withRouter } from "react-router-dom"; 
 import { setStore } from '../utils/storage';
 
 class Login extends Component {
