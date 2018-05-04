@@ -6,6 +6,76 @@ import { getStore } from '../utils/storage'
 import { getFoodItems, delFoodItem } from '../api/foods';
 import './style/foodForm.less';
 
+const columns = [{
+  title: '商品图片',
+  key: 'img',
+  dataIndex: 'imgdata',
+  width: 150,
+  render: (text, record, index) => {
+    return (
+      < img heght='50px'
+        width='50px'
+        src={text}
+        alt="" />
+    )
+  },
+}, {
+  title: '商品分类',
+  key: 'category',
+  dataIndex: 'category',
+  width: 150
+}, {
+  title: '商品名称',
+  dataIndex: 'name',
+  key: 'name',
+  width: 150
+}, {
+  title: '单位',
+  dataIndex: 'unit',
+  key: 'unit',
+  width: 150
+}, {
+  title: '商品售价',
+  dataIndex: 'price',
+  key: 'price',
+  width: 150,
+  render: text => `￥${text}`
+}, {
+  title: '商品标签',
+  dataIndex: 'tips',
+  key: 'tips',
+  width: 150
+}, {
+  title: '操作',
+  key: 'action',
+  width: 50,
+  render: (text, record, index) => {
+    // 更多操作下拉
+    const moreMenu = (
+      <Menu>
+        <Menu.Item>
+          <Link
+            to={{
+              pathname: "/app/foodForm/change",
+              query: record
+            }}
+          >修改</Link>
+        </Menu.Item>
+        <Menu.Item>
+          {/* 不知为何这里一定要用() => this.delFoodItem(record.id)这种写法 */}
+          <Popconfirm title="是否确定删除该菜品?" onConfirm={() => this.delFood(record.id)}>
+            <a>删除</a>
+          </Popconfirm>
+        </Menu.Item>
+      </Menu>
+    );
+    return (
+      <Dropdown overlay={moreMenu}>
+        <span>< Icon type="plus" style={{ fontSize: 16, color: '#08c', cursor: 'pointer' }} /></span >
+      </Dropdown>
+    )
+  }
+}]
 class FoodForm extends Component {
   state = { 
     selectedRowKeys: [], // 选中的行
@@ -25,7 +95,11 @@ class FoodForm extends Component {
     let shop = getStore('shopInfo')
     getFoodItems({ shopId: shop.id }).then(res => {
       if (res.data.success) {
-        this.setState({ data: res.data.data })
+        let data = res.data.data.map((item, i) => {
+          item.key = i
+          return item
+        })
+        this.setState({ data })
       }
     })  
   }
@@ -64,80 +138,7 @@ class FoodForm extends Component {
 
     // 表格列配置
     // 如果是可滑动表格则必须width，不然会不对齐
-    const columns = [{
-        title: '商品图片',
-        key: 'img',
-        dataIndex: 'imgdata',
-        width: 150,
-        render: (text, record, index) => {
-          return (
-            < img heght = '50px'
-            width = '50px'
-            src = {text}
-            alt = "" / >
-          )
-        },
-      }, {
-        title: '商品分类',
-        key: 'category',
-        dataIndex: 'category',
-        width: 150
-      }, {
-        title: '商品名称',
-        dataIndex: 'name',
-        key: 'name',
-        width: 150
-      }, {
-        title: '单位',
-        dataIndex: 'unit',
-        key: 'unit',
-        width: 150
-      }, {
-        title: '商品售价',
-        dataIndex: 'price',
-        key: 'price',
-        width: 150,
-        render: (text)=>{
-          return (
-            `￥${text}`
-          )
-        }
-      }, {
-        title: '商品标签',
-        dataIndex: 'tips',
-        key: 'tips',
-        width: 150
-      }, {
-        title: '操作',
-        key: 'action',
-        width: 50,
-        render: (text, record, index)=>{
-          // 更多操作下拉
-          const moreMenu = (
-            <Menu>
-              <Menu.Item>
-                <Link 
-                  to={{
-                      pathname: "/app/foodForm/change",
-                      query: record
-                  }}
-                >修改</Link>
-              </Menu.Item>
-              <Menu.Item>
-                {/* 不知为何这里一定要用() => this.delFoodItem(record.id)这种写法 */}
-                <Popconfirm title="是否确定删除该菜品?" onConfirm={() => this.delFood(record.id)}>
-                  <a href="javascript:;">删除</a>
-                </Popconfirm>
-              </Menu.Item>
-            </Menu>
-          );
-          return (
-            <Dropdown overlay = {moreMenu}>
-              <span>< Icon type = "plus"style = {{fontSize: 16,color: '#08c', cursor: 'pointer'}}/></span >
-            </Dropdown>
-          )
-        }
-      }]
+    
     
     // 获取到选中行
     let { selectedRowKeys } = this.state;

@@ -183,6 +183,7 @@ class NoShop extends Component {
               经度：{this.state.center.longitude} ，纬度：{this.state.center.latitude}
             </Card>
           )
+        default: break
       }
     }
 

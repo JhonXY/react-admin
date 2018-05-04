@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Checkbox, InputNumber, Select, Input, Button} from 'antd';
+import { Row, Col, Checkbox, InputNumber, Select, Input, Button, Message } from 'antd';
 import { Form } from 'antd';
 import { TimePicker } from 'antd';
 import { Table } from 'antd';
@@ -10,10 +10,12 @@ import { subHostel, getHotels } from '../api/hostels';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const serviceMap = ['wifi', 'net', 'bathroom']
 // const { Column, ColumnGroup } = Table;
 
 class HostelForm extends Component {
   state = {
+    data: [],
     // 表单相关控制初始化
     tuichecked: true, //是否可退 
     brechecked: true, //是否有早餐 
@@ -22,11 +24,10 @@ class HostelForm extends Component {
 
   componentDidMount(){
     let shop = getStore('shopInfo')
-    getHotels({
-      shopId: shop.id
-    }).then( res => {
-      console.log(res);
+    this.setState({shop}, () =>{
+      this.getData(shop)
     })
+    // 获取当前店铺的旅店信息
   }
 
   toggleDisabled = (e) => {
@@ -46,6 +47,54 @@ class HostelForm extends Component {
     }
   }
 
+  getData(shop) {
+    getHotels({
+      shopId: shop.id
+    }).then(res => {
+      console.log(res);
+      let newData = res.data.data.data.map((item, i) => {
+        let cur = {}, service = []
+        cur.key = i
+        item.equipments.split('').forEach((t, index) => {
+          if (t === '1') {
+            service.push(serviceMap[index])
+          }
+        })
+        if (item.cancel === '1') {
+          service.push({
+            cancel: {
+              whether: 1,
+              date: item.cancelDate
+            }
+          })
+        }
+        if (item.breakfast > 0) {
+          service.push({
+            breakfast: {
+              whether: 1,
+              num: item.breakfast
+            }
+          })
+        } else {
+          service.push({
+            breakfast: {
+              whether: 0,
+              num: item.breakfast
+            }
+          })
+        }
+
+        return {
+          date: new Date(item.createdAt).toLocaleDateString().split('/').map(i => i.length < 2 ? '0' + i : i).join('-'),
+          price: item.price, member: 2, instro: item.intro, model: item.name, key: i, service
+        }
+      })
+      // console.log(newData);
+      this.setState({
+        data: newData
+      })
+    })
+  }
 
   onChange(e) {
     e.target 
@@ -64,11 +113,11 @@ class HostelForm extends Component {
         let shop = getStore('shopInfo')
         let obj = {
           name: values.hostelBedType,
-          intro: values.hostelBedDetail,
+          intro: values.hostelBedDetail || '暂无',
           breakfast: values.hostelBrenum,
           price: values.hostelPrice,
-          cancel: values.hostelCantui,
-          cancelDate: values.hostelTuidate,
+          cancel: values.hostelCantui || '0',
+          cancelDate: values.hostelTuidate || '不可退',
           equipments: [
             values.hostelEquipment_bathroom,
             values.hostelEquipment_net,
@@ -78,9 +127,13 @@ class HostelForm extends Component {
           shopId: shop.id
         }
         subHostel(obj).then(res => {
-          console.log(res);
+          if(res.data.success){
+            Message.success(res.data.message)
+            this.getData(this.state.shop)
+          } else {
+            Message.error(res.data.message)
+          }
         })
-        
       }
     });
   }
@@ -90,45 +143,6 @@ class HostelForm extends Component {
 
     const { getFieldDecorator } = this.props.form;
     // 接口获取已存在的床位信息
-    const data =[
-      { 
-        key: 1,
-        model: '大床房', price: '125', num: '5', date: '2017-10-7', member: 2, instro: '1.8m 双人床',
-        service: [
-          'wifi', 'net', 'bathroom', 
-          {
-            breakfast: {
-              whether: 1,
-              num: 2
-            }
-          },
-          {
-            cancel: {
-              whether: 1,
-              date: '19:00'
-            }
-          }
-        ]
-      },
-      { key: 2, model: '标准房', price: '120', num: '5', date: '2017-10-7', member: 2,
-        service: [
-          'wifi', 'net', 'bathroom',
-          {
-            breakfast: {
-              whether: 0,
-            }
-          },
-          {
-            cancel: {
-              whether: 1,
-              date: '19:00'
-            }
-          }
-        ]
-      },
-      { key: 3, model: '单人房', price: '100', num: '5', date: '2017-10-7', member: 2},
-      { key: 4, model: '单人房', price: '100', num: '5', date: '2017-10-7', member: 2},
-    ]
 
     // 表格结构
     const columns = [
@@ -153,44 +167,37 @@ class HostelForm extends Component {
 
     // 表格下拉更多的内容
     const expand = (data)=>{
-      if (!data.service) {
-        return (
-          <div className="service-items" key={data.key}>
-            暂无更多
-          </div>
-        )
-      } else {
-        let more = data.service.map((item, index, arr) => {
-          if (typeof item !== 'object') {
-            return (
-              <span key={index}>{item}</span>
-            )
-          } else {
-            // 通过switch来为不同的复杂对象做处理
-            switch (true) {
-              case (typeof item.breakfast === 'object') :
-                return (
-                  item.breakfast.whether === 0
-                    ?<span key={index}>无早</span>
-                    :<span key={index}>早餐供应: {item.breakfast.num} 份</span>
-                );
-              case (typeof item.cancel === 'object') :
-                return (
-                  item.cancel.whether === 0
-                    ? <span key={index}>不可退</span>
-                    : <span key={index}>退房时间: {item.cancel.date} 前</span>
-                );
-              default:
-                return null;
-            }
+      let more = data.service.map((item, index, arr) => {
+        if (typeof item !== 'object') {
+          return (
+            <span key={index}>{item}</span>
+          )
+        } else {
+          // 通过switch来为不同的复杂对象做处理
+          switch (true) {
+            case (typeof item.breakfast === 'object') :
+              if (item.breakfast.whether === 0) break
+              return (<span key={index}>早餐供应: {item.breakfast.num} 份</span>)
+            case (typeof item.cancel === 'object') :
+              if (item.cancel.whether === 0) break
+              return (<span key={index}>退房时间: {item.cancel.date} 前</span>)
+            default: break
           }
-        })
+        }
+      })    
+      if(more.length > 0 && !!more[0]){
         return (
           <section>提供服务 :
             <div className="service-items" key={data.key}>
               {more}
             </div>
-          </section> 
+          </section>
+        )
+      } else {
+        return (
+          <div className="service-items" key={data.key}>
+            暂无更多
+          </div>
         )
       }
     }
@@ -251,9 +258,9 @@ class HostelForm extends Component {
                 <Col span={20}>
                   <FormItem>
                     {getFieldDecorator('hostelBrenum', {
-                      initialValue: 1,
+                      initialValue: 0,
                     })(
-                      <InputNumber disabled={_this.state.brechecked} min={1} max={10} onChange={_this.onChange} />
+                      <InputNumber disabled={_this.state.brechecked} min={0} max={10} onChange={_this.onChange} />
                     )}份
                   </FormItem>
                 </Col>
@@ -341,7 +348,7 @@ class HostelForm extends Component {
             <Table 
               columns={columns}
               expandedRowRender={expand} 
-              dataSource={data}
+              dataSource={this.state.data}
             />
           </Col>
         </Row>

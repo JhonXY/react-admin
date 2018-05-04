@@ -9,12 +9,12 @@ const reducer = (state, action) => {
   }
 };
 
-const state = reducer(1, 
-  {
-  type: 'ADD',
-  payload: 2
-  }
-);
+// const state = reducer(1, 
+//   {
+//   type: 'ADD',
+//   payload: 2
+//   }
+// );
 
 const store = createStore(
   reducer,

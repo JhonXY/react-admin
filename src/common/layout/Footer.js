@@ -9,7 +9,9 @@ class FooterBar extends Component {
   render() {
     return (
       <Footer
-        style={{}}>footer</Footer>
+        style={{}}>
+        lll ©2018 Created by JhonXY
+      </Footer>
     );
   }
 }

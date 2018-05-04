@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Tooltip, Tag, Input, message } from 'antd';
 import { Select, Form, Button } from 'antd';
 import { Upload, Icon } from 'antd';
-import { getStore } from '../utils/storage'
-import { withRouter, Link } from "react-router-dom"; 
+// import { getStore } from '../utils/storage'
+import { Link } from "react-router-dom"; 
 import './style/foodFormChange.less';
 const { Option } = Select; 
 const FormItem = Form.Item; 
@@ -133,7 +133,7 @@ class FoodFormChange extends Component {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       getBase64(info.file.originFileObj, imgdata => {
-        info.file.status === 'done'
+        // info.file.status === 'done'
         this.setState({ imgdata, loading: false, }, () => {
           console.log(this.state);
         })
@@ -143,7 +143,7 @@ class FoodFormChange extends Component {
   }
 
   render() {
-    const good =this.state.item
+    // const good =this.state.item
     
     const tags = 
       this.state.tips.length === 0
