@@ -7,7 +7,7 @@ import { Row, Col } from 'antd';
 import { Spin, Icon, Card } from 'antd';
 // api
 import { shopInfo } from '../../api/users';
-import { getStore } from '../../utils/storage';
+import { getStore,setStore } from '../../utils/storage';
 
 const Step = Steps.Step;
 const FormItem = Form.Item;
@@ -74,6 +74,13 @@ class NoShop extends Component {
     });
   }
 
+  componentWillUnmount(){
+    // 滞空所有的setState
+    this.setState = (state, callback) => {
+      return
+    }
+  }
+
   next = () => {
     if(this.state.current === 1){
       this.handleSubmit()
@@ -105,8 +112,8 @@ class NoShop extends Component {
     
     shopInfo(obj).then(res => {
       if(res.data.success){
-        // console.log(this.props);
-        this.props.hasNow()
+        setStore('shopInfo', res.data.shop)
+        this.props.hasNow(true)
       }
     })
   }

@@ -3,8 +3,10 @@ import { Tooltip, Tag, Input, message } from 'antd';
 import { Select, Form, Button } from 'antd';
 import { Upload, Icon } from 'antd';
 // import { getStore } from '../utils/storage'
+import { getStore } from '../utils/storage'
 import { Link } from "react-router-dom"; 
 import './style/foodFormChange.less';
+import { changeFoodItem } from '../api/foods';
 const { Option } = Select; 
 const FormItem = Form.Item; 
 
@@ -28,15 +30,18 @@ class FoodFormChange extends Component {
     imgdata: '',
     filelist: [],
     loading: false,
+    id: ''
   }
 
   componentWillMount() {
     let query = this.props.location.query
+    console.log(query);
+    
     if (query){
-      let { name, price, category, unit, tips, introduction, imgdata } = query
+      let { name, price, category, unit, tips, introduction, imgdata, id } = query
       let tipsArr = tips.split(' ')
       this.setState({
-        name, price, category, unit, imgdata, tips: tipsArr, intro: introduction
+        name, price, category, unit, imgdata, tips: tipsArr, intro: introduction, id
       });
     }
     // console.log(this.state.item); // 接收到传递来的行信息
@@ -50,13 +55,29 @@ class FoodFormChange extends Component {
   // 处理提交的函数
   handleSubmit = (e) => {
     e.preventDefault();
+    let shop = getStore('shopInfo')
+    let forPost = {
+      tags: this.state.tips,
+      imgdata: this.state.imgdata,
+      shopId: shop.id
+    }
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 此处做提交处理
         console.log('Received values of form: ', values);
-        this.setState({ })
+        forPost = { ...forPost, ...values, itemId: this.state.id }
+        changeFoodItem(forPost).then(res => {
+          res.data.success ?
+            message.success('菜品已修改', 2, () => {
+              this.props.history.push("/app/foodForm");
+            }) :
+            message.err('菜品未修改成功')
+        })
+      } else {
+        message.err('填写信息有误')
       }
     });
+    
   }
 
   hasErrors = (fieldsError) => {

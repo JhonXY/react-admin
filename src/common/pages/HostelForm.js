@@ -86,7 +86,7 @@ class HostelForm extends Component {
 
         return {
           date: new Date(item.createdAt).toLocaleDateString().split('/').map(i => i.length < 2 ? '0' + i : i).join('-'),
-          price: item.price, member: 2, instro: item.intro, model: item.name, key: i, service
+          price: item.price, member: 2, instro: item.intro, model: item.name, key: i, service,left: item.left
         }
       })
       // console.log(newData);
@@ -148,7 +148,7 @@ class HostelForm extends Component {
     const columns = [
       {title: '床型', dataIndex: 'model', key: 'model'},
       {title: '售价', dataIndex: 'price', key: 'price'},
-      {title: '总量', dataIndex: 'num', key: 'num'},
+      {title: '总量', dataIndex: 'left', key: 'left'},
       {title: '录入时间', dataIndex: 'date', key: 'date'},
       {title: '可住人数', dataIndex: 'member', key: 'member'},
     ]

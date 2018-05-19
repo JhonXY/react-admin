@@ -6,7 +6,7 @@ import './style/index.less';
 import HasShop from './index/HasShop';
 import NoShop from './index/NoShop';
 
-import { getStore } from '../utils/storage';
+import { getStore, setStore } from '../utils/storage';
 import { userHasShop } from '../api/users';
 class Index extends Component {
   // state = {
@@ -16,33 +16,34 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasShop: false, // 是否已有店铺 
+      hasShop: null, // 是否已有店铺 
     };
   }
-  componentWillMount(){
+  componentDidMount(){
     let storage = getStore('userInfo')
-    if(storage) {
-      userHasShop({
-        id: storage.id
-      }).then(res => {
-        if(res.data.hasShop){
-          this.shopStatus()
-        }
-      })
-    }
+    // 存在用户信息时查找是否有店铺
+    storage && userHasShop({
+      id: storage.id
+    }).then(res => {
+      res.data.code && this.shopStatus(res.data.hasShop)
+    })
   }
-  shopStatus = () => {
+  shopStatus = (res) => {
     this.setState({
-      hasShop: !this.state.hasShop
+      hasShop: res
     })
   }
   render() {
     const indexContent = () => {
-      return (
-        this.state.hasShop
-          ? <HasShop />
-          : <NoShop hasNow={this.shopStatus} />
-      )
+      if (this.state.hasShop !== null){
+        return (
+          this.state.hasShop
+            ? <HasShop />
+            : <NoShop hasNow={this.shopStatus} />
+        )
+      } else {
+        return
+      }
     }
     return (
       <div>

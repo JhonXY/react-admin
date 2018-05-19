@@ -54,15 +54,24 @@ class FoodFormNew extends Component {
         // 此处做提交处理
         forPost = { ...forPost, ...values }
         console.log('Received values of form: ', forPost);
+        subFoodItem(forPost).then(res => {
+          res.data.success ?
+            message.success('菜品已提交', 2, () => {
+              this.props.history.push("/app/foodForm");
+            }) :
+            message.err('菜品未提交')
+        })
+      } else {
+        message.err('填写信息有误')
       }
     });
-    subFoodItem(forPost).then(res => {
-      res.data.success 
-        ? message.success('菜品已提交', 2,() => {
-          this.props.history.push("/app/foodForm");
-        })
-        : message.err('菜品未提交')
-    })
+    // subFoodItem(forPost).then(res => {
+    //   res.data.success 
+    //     ? message.success('菜品已提交', 2,() => {
+    //       this.props.history.push("/app/foodForm");
+    //     })
+    //     : message.err('菜品未提交')
+    // })
   }
 
   hasErrors = (fieldsError) => {

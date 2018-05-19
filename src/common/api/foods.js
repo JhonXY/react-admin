@@ -40,3 +40,16 @@ export function delFoodItem(params) {
     params
   })
 }
+
+export function changeFoodItem(data) {
+  const token = getStore('token')
+
+  return fetch({
+    url: '/shops/changeFoodItem',
+    method: 'post',
+    headers: {
+      'Authorization': 'Bearer' + token.token
+    },
+    data
+  })
+}
